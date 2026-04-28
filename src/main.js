@@ -82,14 +82,22 @@ function frameCameraToObject(object3D) {
   controls.update();
 }
 
+function placeObjectOnGround(object3D, groundY = 0) {
+  const box = new THREE.Box3().setFromObject(object3D);
+  const minY = box.min.y;
+  const lift = groundY - minY + 0.005;
+  object3D.position.y += lift;
+}
+
 const modelUrl = "/models/DamagedHelmet/DamagedHelmet.gltf";
 const loader = new GLTFLoader();
 loader.load(
   modelUrl,
   (gltf) => {
     const model = gltf.scene;
-    model.position.y = 0.6;
+    model.position.set(0, 0, 0);
     scene.add(model);
+    placeObjectOnGround(model, 0);
     frameCameraToObject(model);
 
     if (status) {
