@@ -3,7 +3,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import "./style.css";
 
-const container = document.getElementById("app");
+const container = document.getElementById("scene-container");
+if (!container) {
+  throw new Error("找不到场景容器 #scene-container");
+}
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe7eef7);
@@ -18,7 +21,7 @@ camera.position.set(6, 4, 8);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(container.clientWidth, container.clientHeight);
 container.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -76,9 +79,11 @@ loader.load(
 );
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(width, height);
 }
 
 window.addEventListener("resize", onWindowResize);
