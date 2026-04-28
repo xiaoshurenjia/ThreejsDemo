@@ -50,3 +50,13 @@ body {
   font-size: 13px;
   color: #d6f5d6;
 }
+
+#status.status-error {
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+#status.status-success {
+  color: #d6f5d6;
+  font-weight: 400;
+}

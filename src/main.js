@@ -38,6 +38,8 @@ scene.add(directionalLight);
 
 const grid = new THREE.GridHelper(24, 24, 0xaaaaaa, 0xd4d4d4);
 scene.add(grid);
+const axesHelper = new THREE.AxesHelper(3);
+scene.add(axesHelper);
 
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(24, 24),
@@ -67,6 +69,8 @@ loader.load(
     scene.add(object);
     if (status) {
       status.textContent = "模型加载成功：house.obj";
+      status.classList.remove("status-error");
+      status.classList.add("status-success");
     }
   },
   undefined,
@@ -74,6 +78,8 @@ loader.load(
     console.error("模型加载失败:", error);
     if (status) {
       status.textContent = "模型加载失败，请检查资源路径。";
+      status.classList.remove("status-success");
+      status.classList.add("status-error");
     }
   }
 );
