@@ -73,8 +73,7 @@ function frameCameraToObject(object3D) {
   controls.update();
 }
 
-const modelUrl =
-  "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf";
+const modelUrl = "/models/DamagedHelmet/DamagedHelmet.gltf";
 const loader = new GLTFLoader();
 loader.load(
   modelUrl,
@@ -94,7 +93,7 @@ loader.load(
   (error) => {
     console.error("模型加载失败:", error);
     if (status) {
-      status.textContent = "模型加载失败，请检查网络或模型地址。";
+      status.textContent = "模型加载失败，请检查本地模型资源是否存在。";
       status.classList.remove("status-success");
       status.classList.add("status-error");
     }

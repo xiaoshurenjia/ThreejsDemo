@@ -34,9 +34,8 @@ npm run build
 ## 模型说明
 
 - 当前默认模型为 Khronos 官方 glTF Sample Models 的 `DamagedHelmet`（含材质与贴图）
-- 模型地址：
-  `https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf`
-- 首次加载依赖网络，请保持可访问外网
+- 模型资源已放在本地：`public/models/DamagedHelmet/`
+- 无需依赖外网即可加载，适合教学与离线演示
 
 ## 项目结构
 
@@ -45,6 +44,8 @@ npm run build
 ├── docs/
 │   └── spec-v1.md           # 规格文档（Spec）
 ├── public/
+│   └── models/
+│       └── DamagedHelmet/     # 本地 glTF 模型与贴图资源
 ├── src/
 │   ├── main.js              # three.js 场景、glTF模型加载与交互逻辑
 │   └── style.css            # 页面样式
