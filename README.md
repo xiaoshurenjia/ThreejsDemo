@@ -1,7 +1,7 @@
 # ThreejsDemo
 
 一个面向 three.js 初学者的入门示例项目。  
-当前版本实现了一个基础三维场景，可加载房子模型，并支持旋转、缩放和平移查看。
+当前版本实现了一个基础三维场景，加载开源 glTF 贴图模型（DamagedHelmet），并支持旋转、缩放和平移查看。
 
 ## 快速开始
 
@@ -31,6 +31,13 @@ npm run build
 - 鼠标滚轮：缩放（拉近/拉远）
 - 鼠标右键拖动：平移
 
+## 模型说明
+
+- 当前默认模型为 Khronos 官方 glTF Sample Models 的 `DamagedHelmet`（含材质与贴图）
+- 模型地址：
+  `https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf`
+- 首次加载依赖网络，请保持可访问外网
+
 ## 项目结构
 
 ```text
@@ -38,11 +45,10 @@ npm run build
 ├── docs/
 │   └── spec-v1.md           # 规格文档（Spec）
 ├── public/
-│   └── models/
-│       └── house.obj        # 示例房子模型
 ├── src/
-│   ├── main.js              # three.js 场景与交互逻辑
+│   ├── main.js              # three.js 场景、glTF模型加载与交互逻辑
 │   └── style.css            # 页面样式
 ├── index.html
 └── package.json
 ```
+

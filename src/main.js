@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import "./style.css";
 
 const container = document.getElementById("scene-container");
@@ -52,23 +52,40 @@ scene.add(ground);
 
 const status = document.getElementById("status");
 
-const loader = new OBJLoader();
+function frameCameraToObject(object3D) {
+  const box = new THREE.Box3().setFromObject(object3D);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+
+  const maxSize = Math.max(size.x, size.y, size.z);
+  const fitHeightDistance = maxSize / (2 * Math.tan((Math.PI * camera.fov) / 360));
+  const fitWidthDistance = fitHeightDistance / camera.aspect;
+  const distance = Math.max(fitHeightDistance, fitWidthDistance) * 1.5;
+
+  camera.position.set(center.x + distance, center.y + distance * 0.4, center.z + distance);
+  camera.near = 0.01;
+  camera.far = distance * 20;
+  camera.updateProjectionMatrix();
+
+  controls.target.copy(center);
+  controls.minDistance = distance * 0.2;
+  controls.maxDistance = distance * 5;
+  controls.update();
+}
+
+const modelUrl =
+  "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf";
+const loader = new GLTFLoader();
 loader.load(
-  "/models/house.obj",
-  (object) => {
-    object.traverse((child) => {
-      if (child.isMesh) {
-        child.material = new THREE.MeshStandardMaterial({
-          color: 0xb3c0d1,
-          roughness: 0.85,
-          metalness: 0.05,
-        });
-      }
-    });
-    object.position.y = 0;
-    scene.add(object);
+  modelUrl,
+  (gltf) => {
+    const model = gltf.scene;
+    model.position.y = 0.6;
+    scene.add(model);
+    frameCameraToObject(model);
+
     if (status) {
-      status.textContent = "模型加载成功：house.obj";
+      status.textContent = "模型加载成功：DamagedHelmet (glTF + 贴图)";
       status.classList.remove("status-error");
       status.classList.add("status-success");
     }
@@ -77,7 +94,7 @@ loader.load(
   (error) => {
     console.error("模型加载失败:", error);
     if (status) {
-      status.textContent = "模型加载失败，请检查资源路径。";
+      status.textContent = "模型加载失败，请检查网络或模型地址。";
       status.classList.remove("status-success");
       status.classList.add("status-error");
     }
