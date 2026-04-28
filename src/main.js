@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { UltraHDRLoader } from "three/examples/jsm/loaders/UltraHDRLoader.js";
 import "./style.css";
 
 const container = document.getElementById("scene-container");
@@ -24,7 +24,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.2;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 container.appendChild(renderer.domElement);
 
@@ -40,10 +40,20 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
 directionalLight.position.set(5, 10, 6);
 scene.add(directionalLight);
 
-// 为 PBR 材质提供环境反射，提升金属与粗糙度细节表现
-const pmremGenerator = new THREE.PMREMGenerator(renderer);
-const envTexture = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
-scene.environment = envTexture;
+// 对齐 three.js 官方示例：使用 HDR 全景作为背景与环境反射
+new UltraHDRLoader().load(
+  "/textures/equirectangular/royal_esplanade_2k.hdr.jpg",
+  (texture) => {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = texture;
+    scene.environment = texture;
+    scene.backgroundBlurriness = 0.1;
+  },
+  undefined,
+  (error) => {
+    console.warn("HDR 环境贴图加载失败，回退为纯色背景：", error);
+  }
+);
 
 const grid = new THREE.GridHelper(24, 24, 0xaaaaaa, 0xd4d4d4);
 scene.add(grid);
